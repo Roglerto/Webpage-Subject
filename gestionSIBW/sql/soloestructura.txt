@@ -1,0 +1,220 @@
+﻿-- Create tables section -------------------------------------------------
+
+-- Table Alumno
+
+CREATE TABLE Alumno
+(
+  dnialumno Char(9) NOT NULL,
+  nombrealumnoa Varchar(15) NOT NULL,
+  apellidos Varchar(30),
+  email Varchar(50),
+  password Varchar(20),
+  isregister Bool,
+  weblink Text,
+  acercademi Text,
+  nombre Char(1) NOT NULL
+)
+;
+
+ALTER TABLE Alumno ADD PRIMARY KEY (dnialumno,nombre)
+;
+
+-- Table Calificacion
+
+CREATE TABLE Calificacion
+(
+  nota Double,
+  observaciones Text,
+  dniprofesor Char(9) NOT NULL,
+  dnialumno Char(9) NOT NULL,
+  nombre Char(1) NOT NULL,
+  id Int NOT NULL
+)
+;
+
+ALTER TABLE Calificacion ADD PRIMARY KEY (dniprofesor,dnialumno,nombre,id)
+;
+
+-- Table Profesor
+
+CREATE TABLE Profesor
+(
+  dniprofesor Char(9) NOT NULL,
+  nombre Varchar(15),
+  apellidos Varchar(30),
+  email Varchar(50),
+  password Varchar(20),
+  isregister Bool,
+  weblink Text,
+  acercademi Text
+)
+;
+
+ALTER TABLE Profesor ADD PRIMARY KEY (dniprofesor)
+;
+
+-- Table Grupo
+
+CREATE TABLE Grupo
+(
+  nombre Char(1) NOT NULL
+)
+;
+
+ALTER TABLE Grupo ADD PRIMARY KEY (nombre)
+;
+
+-- Table Notificacion
+
+CREATE TABLE Notificacion
+(
+  titulo Varchar(30),
+  descripcion Text,
+  dniprofesor Char(9) NOT NULL,
+  id Int NOT NULL
+)
+;
+
+ALTER TABLE Notificacion ADD PRIMARY KEY (dniprofesor,id)
+;
+
+-- Table Evento
+
+CREATE TABLE Evento
+(
+  fecha Date NOT NULL,
+  titulo Varchar(50) NOT NULL,
+  descripcion Text,
+  dniprofesor Char(9) NOT NULL,
+  id Int NOT NULL,
+  hora Varchar(5)
+)
+;
+
+ALTER TABLE Evento ADD PRIMARY KEY (dniprofesor,id)
+;
+
+-- Table Tiene
+
+CREATE TABLE Tiene
+(
+  dniprofesor Char(9) NOT NULL,
+  dnialumno Char(9) NOT NULL,
+  nombre Char(1) NOT NULL,
+  id Int NOT NULL
+)
+;
+
+ALTER TABLE Tiene ADD PRIMARY KEY (dniprofesor,dnialumno,nombre,id)
+;
+
+-- Table Gestiona
+
+CREATE TABLE Gestiona
+(
+  nombre Char(1) NOT NULL,
+  dniprofesor Char(9) NOT NULL
+)
+;
+
+ALTER TABLE Gestiona ADD PRIMARY KEY (nombre,dniprofesor)
+;
+
+-- Table Entrega
+
+CREATE TABLE Entrega
+(
+  dnialumno Char(9) NOT NULL,
+  dniprofesor Char(9) NOT NULL,
+  nombre Char(1) NOT NULL
+)
+;
+
+ALTER TABLE Entrega ADD PRIMARY KEY (dnialumno,dniprofesor,nombre)
+;
+
+-- Table AlumnoEvento
+
+CREATE TABLE AlumnoEvento
+(
+  dniprofesor Char(9) NOT NULL,
+  dnialumno Char(9) NOT NULL,
+  nombre Char(1) NOT NULL,
+  id Int NOT NULL
+)
+;
+
+ALTER TABLE AlumnoEvento ADD PRIMARY KEY (dniprofesor,dnialumno,nombre,id)
+;
+
+-- Table Archivo
+
+CREATE TABLE Archivo
+(
+  ruta Varchar(255),
+  dniprofesor Char(9) NOT NULL
+)
+;
+
+ALTER TABLE Archivo ADD PRIMARY KEY (dniprofesor)
+;
+
+-- Table Curso
+
+CREATE TABLE Curso
+(
+  asignatura Varchar(30),
+  fechainicio Char(20) NOT NULL,
+  dniprofesor Char(9) NOT NULL
+)
+;
+
+ALTER TABLE Curso ADD PRIMARY KEY (fechainicio,dniprofesor)
+;
+
+-- Create relationships section ------------------------------------------------- 
+
+ALTER TABLE Gestiona ADD CONSTRAINT Relationship7 FOREIGN KEY (nombre) REFERENCES Grupo (nombre) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE AlumnoEvento ADD CONSTRAINT Relationship14 FOREIGN KEY (dniprofesor, id) REFERENCES Evento (dniprofesor, id) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Evento ADD CONSTRAINT Relationship15 FOREIGN KEY (dniprofesor) REFERENCES Profesor (dniprofesor) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE AlumnoEvento ADD CONSTRAINT Relationship16 FOREIGN KEY (dnialumno, nombre) REFERENCES Alumno (dnialumno, nombre) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Notificacion ADD CONSTRAINT Relationship19 FOREIGN KEY (dniprofesor) REFERENCES Profesor (dniprofesor) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Tiene ADD CONSTRAINT Relationship20 FOREIGN KEY (dniprofesor, id) REFERENCES Notificacion (dniprofesor, id) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Tiene ADD CONSTRAINT Relationship21 FOREIGN KEY (dnialumno, nombre) REFERENCES Alumno (dnialumno, nombre) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Calificacion ADD CONSTRAINT Relationship22 FOREIGN KEY (dniprofesor) REFERENCES Profesor (dniprofesor) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Calificacion ADD CONSTRAINT Relationship23 FOREIGN KEY (dnialumno, nombre) REFERENCES Alumno (dnialumno, nombre) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Gestiona ADD CONSTRAINT Relationship24 FOREIGN KEY (dniprofesor) REFERENCES Profesor (dniprofesor) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Entrega ADD CONSTRAINT Relationship28 FOREIGN KEY (dnialumno, nombre) REFERENCES Alumno (dnialumno, nombre) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Archivo ADD CONSTRAINT Relationship29 FOREIGN KEY (dniprofesor) REFERENCES Profesor (dniprofesor) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Entrega ADD CONSTRAINT Relationship30 FOREIGN KEY (dniprofesor) REFERENCES Archivo (dniprofesor) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Alumno ADD CONSTRAINT Relationship31 FOREIGN KEY (nombre) REFERENCES Grupo (nombre) ON DELETE CASCADE ON UPDATE CASCADE
+;
+
+ALTER TABLE Curso ADD CONSTRAINT Relationship33 FOREIGN KEY (dniprofesor) REFERENCES Profesor (dniprofesor) ON DELETE CASCADE ON UPDATE CASCADE
+;

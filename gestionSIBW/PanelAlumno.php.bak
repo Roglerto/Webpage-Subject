@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  	<title>SIBW</title>
+  	<link rel="stylesheet" href="estiloPortada.css">
+</head>
+
+ <body>
+  
+
+<div id="body_wrapper">
+	<div id="pan_superior">
+		<table align="center"> 
+			<tr> 
+				<td>LOGO DE SIBW</td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="pan_izquierdo"> 
+		<ul class="navbar">
+				<li><a href="./log/recuperarContrasena.php">¿Ha olvidado su contraseña?</a></li>
+		</ul>
+
+<!--  INICIO CALENDARIO -->
+<?php
+$monthNames = Array("January", "February", "March", "April", "May", "June", "July", 
+"August", "September", "October", "November", "December");
+?>
+<?php
+if (!isset($_REQUEST["month"])) $_REQUEST["month"] = date("n");
+if (!isset($_REQUEST["year"])) $_REQUEST["year"] = date("Y");
+?>
+<?php
+$cMonth = $_REQUEST["month"];
+$cYear = $_REQUEST["year"];
+ 
+$prev_year = $cYear;
+$next_year = $cYear;
+$prev_month = $cMonth-1;
+$next_month = $cMonth+1;
+ 
+if ($prev_month == 0 ) {
+    $prev_month = 12;
+    $prev_year = $cYear - 1;
+}
+if ($next_month == 13 ) {
+    $next_month = 1;
+    $next_year = $cYear + 1;
+}
+?>
+<table width="100px">
+<tr align="center">
+<td bgcolor="#999999" style="color:#FFFFFF">
+<table width="100px" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="50%" align="left">  <a href="<?php echo $_SERVER["PHP_SELF"] . "?month=". $prev_month . "&year=" . $prev_year; ?>" style="color:#FFFFFF">Previous</a></td>
+
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td align="center">
+<table width="100px" border="0" cellpadding="2" cellspacing="2">
+<tr align="center">
+<td colspan="7" bgcolor="#999999" style="color:#FFFFFF"><strong><?php echo $monthNames[$cMonth-1].' '.$cYear; ?></strong></td>
+</tr>
+<tr>
+<td align="center" bgcolor="#999999" style="color:#FFFFFF"><strong>S</strong></td>
+<td align="center" bgcolor="#999999" style="color:#FFFFFF"><strong>M</strong></td>
+<td align="center" bgcolor="#999999" style="color:#FFFFFF"><strong>T</strong></td>
+<td align="center" bgcolor="#999999" style="color:#FFFFFF"><strong>W</strong></td>
+<td align="center" bgcolor="#999999" style="color:#FFFFFF"><strong>T</strong></td>
+<td align="center" bgcolor="#999999" style="color:#FFFFFF"><strong>F</strong></td>
+<td align="center" bgcolor="#999999" style="color:#FFFFFF"><strong>S</strong></td>
+</tr>
+<?php 
+$timestamp = mktime(0,0,0,$cMonth,1,$cYear);
+$maxday = date("t",$timestamp);
+$thismonth = getdate ($timestamp);
+$startday = $thismonth['wday'];
+for ($i=0; $i<($maxday+$startday); $i++) {
+    if(($i % 7) == 0 ) echo "<tr>n";
+    if($i < $startday) echo "<td></td>n";
+    else echo "<td align='center' valign='middle' height='20px'>". ($i - $startday + 1) . "</td>n";
+    if(($i % 7) == 6 ) echo "</tr>n";
+}
+?>
+</table>
+</td>
+</tr>
+</table>
+
+<!--  FIN CALENDARIO -->
+
+	</div>
+	<!-- Contenido principal -->
+	<div id="pan_central">
+			<table ALIGN="center" class="tabla_login"> 
+			<tr>
+				<td> 
+					<IMG SRC="logo_ugr.jpg" ID="logo_login" WIDTH=350 HEIGHT=100>	
+				</td> 
+			</tr> 
+			<tr> 
+				<td>
+					<FORM ALIGN="right" ID="login" ACTION="./log/procesarLogin.php" METHOD="POST">
+						ID (DNI/pasaporte): <INPUT TYPE="text" NAME="id">
+						<br>
+						Contraseña: <INPUT TYPE="password" NAME="clave">
+						<br>
+						<INPUT TYPE="submit" NAME="enviar" VALUE="Aceptar" class="boton">
+					</FORM>
+				</td>
+			</tr>
+			<tr>
+				<td align="CENTER">
+					<a href="./log/recuperarContrasena.php">¿Ha olvidado su contraseña?</a>
+				</td>
+			</tr>
+			</table>
+	</div>
+	
+	<!-- Firma y fecha de la página, ¡sólo por cortesía! -->
+	<div id="pan_inferior">
+		<p>SIBW 2012-2013</p>
+	</div>
+</div>
+ </body>
+</html>
+

@@ -1,0 +1,186 @@
+<?PHP
+	include 'conexion.php';
+?>
+<?php
+require('calendario.php');
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>SIBW</title>
+	<link rel="stylesheet" href="estiloPortada.css">
+</head>
+
+<body>
+	<div id="body_wrapper">
+		<div id="pan_superior">
+			<div id="logo">
+				LOGO DE SIBW
+			</div>
+			<div id="login_superior">
+				<?PHP
+				
+					$conexion = mysql_connect('127.0.0.1:3306', 'root', '');
+					mysql_select_db("bd", $conexion);
+					
+					if(!$conexion)
+					{
+						die("Fallo en la conexión MYSQL: " . mysql_error());
+					}
+					
+					$resultado = mysql_query("SELECT * FROM Alumno WHERE dnialumno=$dni", $conexion);
+					$nfilas = mysql_num_rows($resultado);
+					$fila = mysql_fetch_assoc($resultado);
+					
+					echo "<div id='notificaciones'>0</div> ";
+					echo "<a id='nombreLog' href='personalAlumno.php'>";
+					echo '<IMG SRC="usuario.png" width="20" height="20">';
+					echo $fila['nombrealumnoa'];
+					echo " ";
+					echo $fila['apellidos'];
+					echo "</a>";
+				?>
+		
+				<FORM ACTION="conexion.php" METHOD="POST" STYLE="DISPLAY: inline;">		
+					<INPUT TYPE="submit" NAME="logout" VALUE="(log out)" class="botonLogout">
+				</FORM>
+			</div>
+		</div>
+	
+	<!--  INICIO CALENDARIO -->
+
+<div id="pan_izquierdo">
+	
+			
+			
+		<?PHP 
+			if($tipo == 'alumno')
+				echo'
+			
+				<ul class="navbar">
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/indice.html">PAGINA PRINCIPAL</a></li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/meditaciones.html">ALUMNO</a>
+						<ul class="submenu">
+							<li><a href="#">Prueba</a></li>
+							<li><a href="#">Prueba1</a></li>
+							<li><a href="#">Prueba2</a></li>
+						</ul>
+					</li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/ciudad.html">MI CIUDAD</a></li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/enlaces.html">ENLACES</a></li>
+				</ul>
+			';
+			else
+				if($tipo == 'profesor')
+					echo'
+				<ul class="navbar">
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/indice.html">PAGINA PRINCIPAL</a></li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/meditaciones.html">PROFESOR</a>
+						<ul class="submenu">
+							<li><a href="#">Prueba</a></li>
+							<li><a href="#">Prueba1</a></li>
+							<li><a href="#">Prueba3</a></li>
+						</ul>
+					</li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/ciudad.html">MI CIUDAD</a></li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/enlaces.html">ENLACES</a></li>
+				</ul>
+			';
+				else
+					if($tipo == 'gestor')
+						echo'
+				<ul class="navbar">
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/indice.html">PAGINA PRINCIPAL</a></li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/meditaciones.html">GESTOR</a>
+						<ul class="submenu">
+							<li><a href="#">Prueba</a></li>
+							<li><a href="#">Prueba1</a></li>
+							<li><a href="#">Prueba3</a></li>
+						</ul>
+					</li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/ciudad.html">MI CIUDAD</a></li>
+					<li><a href="../../../../Users/cojonuo/Documents/Facultad/3º/2nd Cuatrimestre/SIBW/Codigos/enlaces.html">ENLACES</a></li>
+				</ul>
+			';
+		
+			
+		?>
+			<form id="formulario">
+	<p>
+    <?php
+
+$hora = getdate(time());
+print( $hora["hours"] . ":" . $hora["minutes"] . ":" . $hora["seconds"] . "    | " ); 
+
+echo gmdate('d-m-Y ');
+
+?>
+   <!-- <input type="text" name="fecha" id="fecha"  /> <a "show_calendar()" style="cursor: pointer;"><small>(calendario)</small></a>-->
+	 <a onclick="show_calendar()" style="cursor: pointer;"><small>(calendario)</small></a>
+	
+	
+    
+
+    <div id="calendario">
+    <?php calendar_html() ?>
+    </div>
+    </label>
+    </p>
+</form>
+
+<!--  FIN CALENDARIO -->
+		</div>
+		<div id="pan_central">
+			<?PHP
+				if($tipo == 'alumno')
+				{
+					$resultado = mysql_query("SELECT * FROM Alumno WHERE dnialumno=$dni", $conexion);
+					$nfilas = mysql_num_rows($resultado);
+				
+					if($nfilas != 0)
+					{
+						$fila = mysql_fetch_assoc($resultado);
+						$nombre = $fila['nombrealumnoa'];
+						$apellidos = $fila['apellidos'];
+						$email1 = $fila['email'];
+						$web = $fila['weblink'];
+						$comentario = $fila['acercademi'];
+					}
+				}
+
+			?>
+			<div class="tituloConMenu">PÁGINA PERSONAL DE ALUMNO</div>
+			<table ALIGN="center" class="tabla_registro"> 
+				<tr> 
+					<td>
+						<FORM ALIGN="right" id="login" ACTION="personalAlumnoEditar.php" METHOD="POST">
+							Nombre: <span class="areaTexto"><?=$nombre;?></span>
+							<br>
+							<br>
+							Apellidos: <span class="areaTexto"><?=$apellidos;?></span>
+							<br>
+							<br>
+							Correo electrónico: <span class="areaTexto"><?=$email1;?></span> 
+							<br>
+							<br>
+							Página web: <span class="areaTexto"><a class="enlace" href="<?=$web;?>"><?=$web;?></a></span> 
+							<br>
+							<br>
+							<textarea name="comentario" rows="10" cols="40"><?=$comentario;?></textarea>
+							<br>
+							<br>
+							<INPUT TYPE="submit" NAME="enviado" VALUE="Editar" class="boton">
+						</FORM>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- Firma y fecha de la página, ¡sólo por cortesía! -->
+		<div id="pan_inferior">
+			<p>SIBW 2012-2013</p>
+		</div>
+	</div>
+</body>
+</html>
